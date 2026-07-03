@@ -1,14 +1,26 @@
 #!/bin/bash
 
-echo "🚀 Starting Spider Bot on Railway..."
+echo "🚀 Spider Bot Starting..."
 
-# Install dependencies manually if needed
-pip install --no-cache-dir python-telegram-bot PyGithub python-dotenv aiohttp asyncio colorama ujson uvloop aiofiles httpx tenacity
+# Setup virtual environment if not exists
+if [ ! -d "venv" ]; then
+    echo "📦 Creating virtual environment..."
+    python3 -m venv venv
+fi
+
+# Activate virtual env
+source venv/bin/activate
+
+# Install dependencies if requirements.txt exists
+if [ -f "requirements.txt" ]; then
+    echo "📦 Installing dependencies..."
+    pip install --no-cache-dir -r requirements.txt
+fi
 
 # Create data directory
 mkdir -p data
 
-# Create default JSON files if not exist
+# Create default JSON files
 [ -f "data/owners.json" ] || echo '{}' > data/owners.json
 [ -f "data/approved_users.json" ] || echo '{}' > data/approved_users.json
 [ -f "data/admins.json" ] || echo '{}' > data/admins.json
@@ -19,6 +31,7 @@ mkdir -p data
 [ -f "data/users.json" ] || echo '[]' > data/users.json
 
 echo "✅ Data files ready"
+echo "🔥 Starting bot..."
 
-# Start the bot
+# Run bot
 python3 main.py
